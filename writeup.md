@@ -20,9 +20,9 @@ The goals / steps of this project are the following:
 
 [image1]: ./images/lenet.png "Model Visualization"
 [image2]: ./images/center.jpg "Center Camera"
-[image3]: ./images/left.jpg "Left Camera"
-[image4]: ./images/right.jpg "Right Camera"
-[image5]: ./images/clockwise.jpg	"Clockwise"
+[image4]: ./images/left.jpg "Left Camera"
+[image5]: ./images/right.jpg "Right Camera"
+[image3]: ./images/clockwise.jpg	"Clockwise"
 
 ## Rubric Points
 
@@ -57,15 +57,15 @@ The model.py file contains the code for training and saving the convolution neur
 
 #### 1. An appropriate model architecture has been employed
 
-My model consists of a convolution neural network with 3x3 filter sizes and depths between 32 and 128 (model.py lines 18-24) 
+My model consists of the LeNet architecture consisting of a convolution neural network with 5x5 filter sizes and depth of 6 (model.py lines 103-118) .
 
-The model includes RELU layers to introduce nonlinearity (code line 20), and the data is normalized in the model using a Keras lambda layer (code line 18). 
+The model includes RELU activation layers to introduce nonlinearity (code line 111 and 113), and the data is normalized in the model using a Keras lambda layer (code line 107). 
 
 #### 2. Attempts to reduce overfitting in the model
 
-The model contains dropout layers in order to reduce overfitting (model.py lines 21). 
+The model contains max-pooling layers in order to reduce overfitting (model.py lines 112 and 114). 
 
-The model was trained and validated on different data sets to ensure that the model was not overfitting (code line 10-16). The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
+The model was trained and validated on different data sets to ensure that the model was not overfitting (code line 12). The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
 
 #### 3. Model parameter tuning
 
@@ -73,7 +73,11 @@ The model used an adam optimizer, so the learning rate was not tuned manually (m
 
 #### 4. Appropriate training data
 
-Training data was chosen to keep the vehicle driving on the road. I used a combination of center lane driving, recovering from the left and right sides of the road ... 
+Training data was chosen to keep the vehicle driving on the road.  I used the following data sets:
+
+* **data** : Training data provided by Udacity.
+* **andrew** : Training data recorded while my son Andrew drove the simulated car three times around the track.
+* **andrewright** : Training data recorded while my son Andrew drove the simulated car once around the track in the clockwise direction.
 
 For details about how I created the training data, see the next section. 
 
@@ -81,7 +85,7 @@ For details about how I created the training data, see the next section.
 
 #### 1. Solution Design Approach
 
-The overall strategy for deriving a model architecture was to ...
+The overall strategy for deriving a model architecture was to 
 
 My first step was to use a convolution neural network model similar to the ... I thought this model might be appropriate because ...
 
@@ -97,35 +101,38 @@ At the end of the process, the vehicle is able to drive autonomously around the 
 
 #### 2. Final Model Architecture
 
-The final model architecture (model.py lines 18-24) consisted of a convolution neural network with the following layers and layer sizes ...
-
-Here is a visualization of the architecture (note: visualizing the architecture is optional according to the project rubric)
+The final model architecture that I used was the LeNet-5 convolutional neural network (model.py lines 105-118) consisting of two convolutional layers and three fully connected layers.  The input and output sizes of the layers are indicated in this visualization of the architecture:
 
 ![alt text][image1]
 
 #### 3. Creation of the Training Set & Training Process
 
-To capture good driving behavior, I first recorded two laps on track one using center lane driving. Here is an example image of center lane driving:
+To capture good driving behavior, I first recorded three laps on track one using center lane driving. Here is an example image of center lane driving:
+
+Center:
 
 ![alt text][image2]
 
-I then recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to .... These images show what a recovery looks like starting from ... :
+I also recorded one lap of good driving behavior for the car traveling around the track in the clockwise direction:
+
+Clockwise:
 
 ![alt text][image3]
+
+Left:
+
 ![alt text][image4]
+
+Right:
+
 ![alt text][image5]
 
-Then I repeated this process on track two in order to get more data points.
 
-To augment the data sat, I also flipped images and angles thinking that this would ... For example, here is an image that has then been flipped:
 
-![alt text][image6]
-![alt text][image7]
+To further augment the data set, I also exploited left-right symmetry in the steering angle by flipping all images. This, consequently, doubled the size of the data set.
 
-Etc ....
+After the collection process, I had 90,772 images in my training set. I kept 20% of this training set aside for validation leaving 72,618 for training and 18,154 for validation.  
 
-After the collection process, I had X number of data points. I then preprocessed this data by ...
+Pre-processing of each image included normalization and cropping (these were performed using Lambda functions in keras).
 
-I finally randomly shuffled the data set and put Y% of the data into a validation set. 
-
-I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was Z as evidenced by ... I used an adam optimizer so that manually training the learning rate wasn't necessary.
+I used this training data for training the model. The validation set helped determine if the model was over or under fitting. I observed no improvement on the validation set after three epochs.  I used an adam optimizer so that manually training the learning rate wasn't necessary.
