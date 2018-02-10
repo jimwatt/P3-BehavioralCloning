@@ -57,17 +57,17 @@ The model.py file contains the code for training and saving the convolution neur
 
 #### 1. An appropriate model architecture has been employed
 
-My model consists of the LeNet network architecture consisting of a convolutional neural network with 5x5 filter sizes and depth of 6 (model.py lines 103-118) .
+My model consists of the LeNet network architecture consisting of two convolutional neural network layers with 5x5 filter sizes and depth of 6 (model.py lines 103-118) .
 
 The model includes RELU activation layers to introduce nonlinearity (code line 111 and 113).
 
-The data is normalized in the model using a Keras lambda layer (code line 107). 
+The data is normalized and cropped in the model using a Keras lambda layer (code line 107). 
 
 #### 2. Attempts to reduce overfitting in the model
 
 The model contains max-pooling layers in order to reduce the number of parameters in the model and prevent overfitting (model.py lines 112 and 114). 
 
-Also, the training images were augmented by exploiting left-right symmetry and using images from different camera angles to increase the size of the data set.
+Also, the training images were augmented by exploiting left-right symmetry in the steering angle and using images from different camera angles to increase the size of the data set.
 
 The model was trained and validated on different data sets to ensure that the model was not overfitting (code line 12). The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
 
@@ -81,9 +81,7 @@ Training data was chosen to keep the vehicle driving on the road.  I used the fo
 
 * **data** : Training data provided by Udacity.
 * **andrew** : Training data recorded while my son Andrew drove the simulated car three times around the track.
-* **andrewright** : Training data recorded while my son Andrew drove the simulated car once around the track in the clockwise direction.
-
-For details about how I created the training data, see the next section. 
+* **andrewright** : Training data recorded while my son Andrew drove the simulated car once around the track in the _clockwise_ direction.
 
 ### Model Architecture and Training Strategy
 
@@ -95,15 +93,15 @@ The main steps were as follows:
 
 1. **Recording Data** : I first recorded data from a human driver.  I recorded data for three laps around the track.  I also recorded data from one lap of driving around the track in the clockwise direction.
 2. **Combining Data** : I set up a data loading pipeline that combined my recorded data with data provided by the Udacity course.
-3. **Data Pipeline** : I first set up an extremely simple data pipeline just to ensure that the basic pipeline for loading data, fitting a model, and then testing in the simulator was in place.  The model for this pipeline was simply a linear regression.  As expected, the performance for this pipeline was atrocious, but it at least confirmed that the data pipeline was in place.
+3. **Data Pipeline** : I began by setting up an extremely simple data pipeline just to ensure that the basic pipeline for loading data, fitting a model, and then testing in the simulator was in place.  The model for this pipeline was simply a linear regression.  As expected, the performance for this pipeline was atrocious, but it at least confirmed that the data pipeline was in place.
 4. **Data Preprocessing** : I introduced minimal data preprocessing using image normalization and image cropping.  These were both instituted using Lambda functions in Keras.
 5. **Data Augmentation** : I also augmented the data by flipping the images from left to right to exploit symmetry in the steering angle about zero.  This effectively doubled the size of the data set.
 6. **LeNet Architecture** : Next, I implemented the LeNet architecture.  This provided more parameters for the model, and training this model allowed for an improved cost and better validation accuracy.  Driving was starting to improve (the car could get around the first bend, but still wandered off the road).
-7. **Further Data Augmentation** : In order to ensure that the car knew how to return to the center of the road, I decided to include the left and right camera images with adjusted steering angles.  The objective is to teach the car to return to the center of the road if it starts to veer to the side.  Using the left and right camera images effectively tripled the amount of data.  I found that I did not need to actively record human swerving behavior in order to help the autonomous vehicle return to the center of the road.
+7. **Further Data Augmentation** : In order to ensure that the car knew how to return to the center of the road, I decided to include the left and right camera images with adjusted steering angles.  The objective was to teach the car to return to the center of the road if it starts to veer to the side.  Using the left and right camera images effectively tripled the amount of data.  I found that I did not need to actively record human swerving behavior in order to help the autonomous vehicle return to the center of the road.
 8. **AWS** : At this point, I had to move processing to the Amazon Web Service because data processing was taking too long.
 9. **Generator** : Also, since memory required to store all the data was too large, I built a python "generator" to efficiently generate batches of images on the fly. 
-10. **Fine Tuning** :  At this point, the trained model was starting to drive well although it still overshot one of the sharp turns.  I increased the steering correction for the left and right camera images to 0.25 from 0.2, and this did the trick to ensure that the vehicle remained in the center of the road.
-11. **NVIDIA Network** : I had planned as a final step to implement the NVIDIA network to further performance, although this ended up not being necessary. The LeNet archotecture worked just fine.
+10. **Fine Tuning** :  At this point, the trained model was starting to drive well although it still overshot one of the sharp turns.  I increased the steering correction for the left and right camera images from 0.2 to 0.25, and this did the trick to ensure that the vehicle remained in the center of the road.
+11. **NVIDIA Network** : I had planned as a final step to implement the NVIDIA network to eke out further performance, although this ended up not being necessary. The LeNet architecture worked just fine.
 
 At the end of the process, the vehicle is able to drive autonomously around the track without leaving the road as seen in the movie: video.mp4.
 
@@ -141,7 +139,7 @@ Right:
 
 To further augment the data set, I also exploited left-right symmetry in the steering angle by flipping all images. This, consequently, doubled the size of the data set.
 
-Exploiting symmetry and using the left and right camera images effectively increased the data size sixfold.
+Exploiting symmetry and using the left and right camera images effectively increased the data size _sixfold_.
 
 After the collection process, I had 90,772 images in my training set. I kept 20% of this training set aside for validation leaving 72,618 for training and 18,154 for validation.  
 
